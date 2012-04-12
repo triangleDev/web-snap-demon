@@ -1,6 +1,6 @@
 
 #include <QtWebKit>
-
+#include <QDebug>
 #include "webcapture.h"
 
 WebCapture::WebCapture()
@@ -23,32 +23,26 @@ WebCapture::WebCapture()
 }
 
 
-void WebCapture::load(const QUrl &url, int zoom, const QString &outputFileName, int width)
+void WebCapture::load(const QUrl &url)
 {
-    zoom_ = zoom;
-    fileName_ = outputFileName;
-
     QWebFrame *frame = page_.mainFrame();
     frame->load(url);
     frame->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
     frame->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
-
-    qreal factor = static_cast<qreal>(zoom_) / 100.0;
-#if QT_VERSION < 0x040500
-    page_.setViewportSize(QSize(width, 3 * width / 4) / factor);
-#else
-    page_.mainFrame()->setZoomFactor(factor);
-    page_.setViewportSize(QSize(width, 3 * width / 4));
-#endif
+    qDebug()<< "loading start";
 }
 
-void WebCapture::saveResult(bool ok)
+bool WebCapture::image(const QString &fileName, int width, int height, int zoom)
 {
-    if (!ok) {
-        emit( finished() );
-        qApp->exit( -1 );
-        return;
-    }
+    qreal factor = static_cast<qreal>(zoom) / 100.0;
+    if (height == 0)
+        height = 3 * width / 4;
+#if QT_VERSION < 0x040500
+    page_.setViewportSize(QSize(width, height) / factor);
+#else
+    page_.mainFrame()->setZoomFactor(factor);
+    page_.setViewportSize(QSize(width, height));
+#endif
 
     // create the image for the buffer
     QSize size = page_.mainFrame()->contentsSize();
@@ -75,6 +69,11 @@ void WebCapture::saveResult(bool ok)
     image = image.scaled(size * factor, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 #endif
     image = image.scaled(QSize(250,381), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    image.save( fileName_ );
-    emit( finished() );
+    image.save( fileName );
+}
+
+void WebCapture::saveResult(bool ok)
+{
+        qDebug()<< "loading ended" << ok;
+   emit( finished() );
 }

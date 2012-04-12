@@ -9,8 +9,8 @@ class WebCapture : public QObject
 
     public:
         WebCapture();
-        void load(const QUrl &url, int zoom, const QString &outputFileName, int width);
-
+        void load(const QUrl &url);
+        bool image(const QString &outputFileName, int width, int height ,int zoom);
     signals:
         void finished();
 
@@ -19,7 +19,6 @@ class WebCapture : public QObject
 
     private:
         webPage page_;
-        QString fileName_;
         int zoom_;
 };
 
