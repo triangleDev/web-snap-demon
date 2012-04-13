@@ -1,5 +1,5 @@
 #include "demon.h"
-
+#include "QMap"
 Demon::Demon(QObject *parent) :
     QObject(parent)
 {
