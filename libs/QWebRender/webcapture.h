@@ -10,13 +10,13 @@ class WebCapture : public QObject
     public:
         WebCapture();
         void load(const QUrl &url);
-        bool image(const QString &outputFileName, int width, int height ,int zoom);
+        void image(const QString &outputFileName, int width, int height ,int zoom);
     signals:
-        void finished();
+        void finished(bool);
 
     private slots:
         void saveResult(bool ok);
-
+        void showProgress(int percent);
     private:
         webPage page_;
         int zoom_;

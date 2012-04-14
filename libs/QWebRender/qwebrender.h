@@ -7,6 +7,10 @@
 #include <QFile>
 #include <QUrl>
 #include <webcapture.h>
+#include <QPointer>
+
+
+#include <QDebug>
 
 class QWEBRENDERSHARED_EXPORT QWebRender : public QObject{
     Q_OBJECT
@@ -22,17 +26,18 @@ public:
     void renderImage(const QString &fileName);
     void load(const QString &url);
     void load(const QUrl &url);
+    void cleanUp();
 
 signals:
-    void loaded();
+    void loaded(bool);
 
 private slots:
-    void loadFinished();
+    void loadFinished(bool ok);
 
 private:
     QSize m_size;
     int m_zoom;
-    WebCapture webCapture;
+    WebCapture *webCapture;
 };
 
 #endif // QWEBRENDER_H

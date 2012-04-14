@@ -1,0 +1,37 @@
+10
+
+dir
+6
+http://qxmlrpc.googlecode.com/svn/trunk/test
+http://qxmlrpc.googlecode.com/svn
+
+
+
+2007-09-20T08:40:49.810285Z
+2
+Dmitry.Poplavsky
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+d2acb829-803a-0410-a433-49bf4981a3fa
+
+pyserver
+dir
+
+unit
+dir
+
+pyclient
+dir
+

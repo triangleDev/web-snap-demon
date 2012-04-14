@@ -40,7 +40,7 @@ QWebRender::QWebRender()
 {
     m_size = QSize(350,600);
     m_zoom = 100;
-    QObject::connect(&webCapture, SIGNAL(finished()), this, SLOT(loadFinished()));
+
 }
 
 void QWebRender::setSize(const QSize &size)
@@ -50,7 +50,7 @@ void QWebRender::setSize(const QSize &size)
 
 void QWebRender::renderImage( const QString &fileName, int width, int height, int zoom)
 {
-    webCapture.image(fileName, width, height, zoom);
+    webCapture->image(fileName, width, height, zoom);
 }
 
 void QWebRender::renderImage( const QString &fileName, QSize size, int zoom)
@@ -75,11 +75,23 @@ void QWebRender::load(const QString &url)
 
 void QWebRender::load(const QUrl &url)
 {
-    webCapture.load(url);
+    qDebug()<<"wecapture "<<webCapture;
+    if (webCapture == NULL) {
+        webCapture = new WebCapture();
+        QObject::connect(webCapture, SIGNAL(finished(bool)), this, SLOT(loadFinished(bool)));
+    }
+    webCapture->load(url);
 }
 
-void QWebRender::loadFinished()
+void QWebRender::cleanUp()
 {
-    emit(loaded());
+    ///disconnect(webCapture,0,0,0);
+    ///webCapture->disconnect();
+    ///webCapture->deleteLater();
+}
+
+void QWebRender::loadFinished(bool ok)
+{
+    emit(loaded(ok));
 }
 

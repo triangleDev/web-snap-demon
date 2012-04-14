@@ -7,13 +7,13 @@ WebCapture::WebCapture()
     : QObject(), zoom_(100)
 {
     connect(&page_, SIGNAL(loadFinished(bool)), this, SLOT(saveResult(bool)));
-
+    connect(&page_, SIGNAL(loadProgress(int)), this, SLOT(showProgress(int)));
     QWebSettings *settings = page_.settings();
 
     settings->setAttribute(QWebSettings::AutoLoadImages, true);
     settings->setAttribute(QWebSettings::DnsPrefetchEnabled, true);
     settings->setAttribute(QWebSettings::JavascriptEnabled, true);
-    settings->setAttribute(QWebSettings::PluginsEnabled, true);
+    settings->setAttribute(QWebSettings::PluginsEnabled, false);
     settings->setAttribute(QWebSettings::JavascriptCanOpenWindows, false);
     settings->setAttribute(QWebSettings::JavascriptCanAccessClipboard, false);
     settings->setAttribute(QWebSettings::DeveloperExtrasEnabled, false);
@@ -29,10 +29,11 @@ void WebCapture::load(const QUrl &url)
     frame->load(url);
     frame->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
     frame->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+    qDebug()<< frame->baseUrl();
     qDebug()<< "loading start";
 }
 
-bool WebCapture::image(const QString &fileName, int width, int height, int zoom)
+void WebCapture::image(const QString &fileName, int width, int height, int zoom)
 {
     qreal factor = static_cast<qreal>(zoom) / 100.0;
     if (height == 0)
@@ -74,6 +75,16 @@ bool WebCapture::image(const QString &fileName, int width, int height, int zoom)
 
 void WebCapture::saveResult(bool ok)
 {
-        qDebug()<< "loading ended" << ok;
-   emit( finished() );
+#if QT_VERSION >= 0x040700
+    page_.action(QWebPage::StopScheduledPageRefresh);
+#else
+    page_.action(QWebPage::Stop);
+#endif
+
+    emit( finished(ok) );
+}
+
+void WebCapture::showProgress(int percent)
+{
+    qDebug()<<percent;
 }

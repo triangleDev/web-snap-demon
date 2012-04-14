@@ -13,7 +13,7 @@ public:
 signals:
     
 public slots:
-    void saveImage();
+    void saveImage(bool ok);
 private:
     QWebRender render;
 };
