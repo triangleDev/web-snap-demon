@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network webkit
+QT       += core gui network webkit xml
 
 TARGET = qwebrender
 TEMPLATE = app
@@ -32,3 +32,15 @@ DEPENDPATH += $$PWD/../libs/QWebRender
 
 HEADERS += \
     demon.h
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../libs/qxmlrpc_lib/ -lqxmlrpc
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../libs/qxmlrpc_lib/ -lqxmlrpc
+else:symbian: LIBS += -lqxmlrpc
+else:unix: LIBS += -L$$PWD/../libs/qxmlrpc_lib/ -lqxmlrpc_debug
+
+INCLUDEPATH += $$PWD/../libs/qxmlrpc
+DEPENDPATH += $$PWD/../libs/qxmlrpc
+
+win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../libs/qxmlrpc_lib/qxmlrpc.lib
+else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../libs/qxmlrpc_lib/qxmlrpc.lib
+else:unix:!symbian: PRE_TARGETDEPS += $$PWD/../libs/qxmlrpc_lib/libqxmlrpc.a

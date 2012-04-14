@@ -40,6 +40,8 @@ QWebRender::QWebRender()
 {
     m_size = QSize(350,600);
     m_zoom = 100;
+    webCapture = new WebCapture();
+    QObject::connect(webCapture, SIGNAL(finished(bool)), this, SLOT(loadFinished(bool)));
 
 }
 
@@ -76,10 +78,6 @@ void QWebRender::load(const QString &url)
 void QWebRender::load(const QUrl &url)
 {
     qDebug()<<"wecapture "<<webCapture;
-    if (webCapture == NULL) {
-        webCapture = new WebCapture();
-        QObject::connect(webCapture, SIGNAL(finished(bool)), this, SLOT(loadFinished(bool)));
-    }
     webCapture->load(url);
 }
 

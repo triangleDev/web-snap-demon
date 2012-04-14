@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'testclient.ui'
 **
-** Created: Sat Nov 5 18:17:53 2011
-**      by: Qt User Interface Compiler version 4.7.4
+** Created: Sun Apr 15 00:45:44 2012
+**      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
