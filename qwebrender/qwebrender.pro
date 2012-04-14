@@ -38,8 +38,8 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../libs/qxmlrpc_lib/ -l
 else:symbian: LIBS += -lqxmlrpc
 else:unix: LIBS += -L$$PWD/../libs/qxmlrpc_lib/ -lqxmlrpc_debug
 
-INCLUDEPATH += $$PWD/../libs/qxmlrpc
-DEPENDPATH += $$PWD/../libs/qxmlrpc
+INCLUDEPATH += $$PWD/../libs/qxmlrpc_lib
+DEPENDPATH += $$PWD/../libs/qxmlrpc_lib
 
 win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../libs/qxmlrpc_lib/qxmlrpc.lib
 else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../libs/qxmlrpc_lib/qxmlrpc.lib
