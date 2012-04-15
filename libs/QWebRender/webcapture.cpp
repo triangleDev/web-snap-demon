@@ -69,7 +69,7 @@ void WebCapture::image(const QString &fileName, int width, int height, int zoom)
     qreal factor = static_cast<qreal>(zoom_) / 100.0;
     image = image.scaled(size * factor, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 #endif
-    image = image.scaled(QSize(250,381), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    image = image.scaled(QSize(width,height), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     image.save( fileName );
 }
 

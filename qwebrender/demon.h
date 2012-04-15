@@ -5,6 +5,7 @@
 #include <qwebrender.h>
 #include <QTimer>
 #include "xmlrpc/client.h"
+#include <QVariantList>
 
 class Demon : public QObject
 {
@@ -14,6 +15,8 @@ public:
     
 signals:
     
+private:
+    void reportBroken(const QMap<QString,xmlrpc::Variant> &item);
 public slots:
     void saveImage(bool ok);
 private slots:
@@ -24,6 +27,10 @@ private:
     QWebRender render;
     QTimer *timer;
     int requestId;
+    bool task;
+    QVariantList shots;
+    int timout;
+    QString path_tmp;
     xmlrpc::Client *client;
 };
 
