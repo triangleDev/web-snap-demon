@@ -36,7 +36,7 @@ HEADERS += \
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../libs/qxmlrpc_lib/ -lqxmlrpc
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../libs/qxmlrpc_lib/ -lqxmlrpc
 else:symbian: LIBS += -lqxmlrpc
-else:unix: LIBS += -L$$PWD/../libs/qxmlrpc_lib/ -lqxmlrpc_debug
+else:unix: LIBS += -L$$PWD/../libs/qxmlrpc_lib/ -lqxmlrpc
 
 INCLUDEPATH += $$PWD/../libs/qxmlrpc_lib
 DEPENDPATH += $$PWD/../libs/qxmlrpc_lib

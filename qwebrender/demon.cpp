@@ -44,7 +44,7 @@ void Demon::saveImage(bool ok)
         }
 
         QFile f(path_tmp + file);
-        if (f.exists() && ! ok){
+        if (f.exists() && ok){
             QImage image(path_tmp + file);
             QByteArray byteArray;
             QBuffer buffer(&byteArray);
