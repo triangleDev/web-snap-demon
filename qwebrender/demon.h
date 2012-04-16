@@ -32,6 +32,7 @@ private:
     int timout;
     QString path_tmp;
     xmlrpc::Client *client;
+    QString meta_js;
 };
 
 #endif // DEMON_H

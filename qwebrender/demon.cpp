@@ -1,5 +1,6 @@
 #include "demon.h"
 #include <QDebug>
+#include <QWebFrame>
 
 Demon::Demon(QObject *parent) :
     QObject(parent)
@@ -15,6 +16,7 @@ Demon::Demon(QObject *parent) :
                      this, SLOT(processReturnValue( int, QVariant )) );
     connect( client, SIGNAL(failed( int, int, QString )),
                      this, SLOT(processFault( int, int, QString )) );
+    meta_js = "function getMetaContents(mn){var m = document.getElementsByTagName('meta');for(var i in m){ if(m[i].name == mn){return m[i].content;}}}getMetaContents('%1');";
 
     QString host;
     QString path;
@@ -49,6 +51,7 @@ void Demon::saveImage(bool ok)
     if (shots.isEmpty()){
         return;
     }
+    QWebFrame *frame = render.getFrame();
     foreach(QVariant item, shots)
     {
         QVariantMap shot = item.toMap();
@@ -72,6 +75,9 @@ void Demon::saveImage(bool ok)
             image_.insert("image", byteArray.toBase64());
             image_.insert("file", file);
             image_.insert("url_title", render.documentTitle());
+
+            image_.insert("url_keywords", frame->evaluateJavaScript(meta_js.arg("keywords")).toString().toLocal8Bit());
+            image_.insert("url_description", frame->evaluateJavaScript(meta_js.arg("description")).toString().toLocal8Bit());
             client->request("speeddial.saveImage",image_);
         }
         else {
