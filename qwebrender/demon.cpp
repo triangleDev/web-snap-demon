@@ -10,13 +10,16 @@ Demon::Demon(QObject *parent) :
     path_tmp = QDir::tempPath() + QDir::toNativeSeparators("/");
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(requestTask()));
-
     client = new xmlrpc::Client();
+    connect( client, SIGNAL(done( int, QVariant )),
+                     this, SLOT(processReturnValue( int, QVariant )) );
+    connect( client, SIGNAL(failed( int, int, QString )),
+                     this, SLOT(processFault( int, int, QString )) );
+
     QString host;
     QString path;
     int port = 80;
     QStringList _argv = qApp->arguments();
-    qDebug()<<_argv;
     for(int i = 0; i < _argv.count(); ++i) {
         if ( _argv[i] == "-h")
             host = _argv[++i];
@@ -33,10 +36,6 @@ Demon::Demon(QObject *parent) :
 
     timer->start(timout);
     client->setHost(host,port,path);
-    connect( client, SIGNAL(done( int, QVariant )),
-                     this, SLOT(processReturnValue( int, QVariant )) );
-    connect( client, SIGNAL(failed( int, int, QString )),
-                     this, SLOT(processFault( int, int, QString )) );
 }
 
 void Demon::reportBroken(const QMap<QString,xmlrpc::Variant> &item)
@@ -46,6 +45,7 @@ void Demon::reportBroken(const QMap<QString,xmlrpc::Variant> &item)
 
 void Demon::saveImage(bool ok)
 {
+
     if (shots.isEmpty()){
         return;
     }
@@ -71,6 +71,7 @@ void Demon::saveImage(bool ok)
             image.save(&buffer,shot.value("ext","PNG").toString().toUpper().toLocal8Bit());
             image_.insert("image", byteArray.toBase64());
             image_.insert("file", file);
+            image_.insert("url_title", render.documentTitle());
             client->request("speeddial.saveImage",image_);
         }
         else {

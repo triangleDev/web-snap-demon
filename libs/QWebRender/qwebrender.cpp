@@ -88,6 +88,17 @@ void QWebRender::cleanUp()
     ///webCapture->deleteLater();
 }
 
+QWebFrame *QWebRender::getFrame()
+{
+    return webCapture->frame();
+}
+
+QString QWebRender::documentTitle()
+{
+    QWebFrame *frame = getFrame();
+    return frame->evaluateJavaScript("document.title").toString();
+}
+
 void QWebRender::loadFinished(bool ok)
 {
     emit(loaded(ok));

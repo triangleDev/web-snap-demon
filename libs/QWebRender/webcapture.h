@@ -11,6 +11,7 @@ class WebCapture : public QObject
         WebCapture();
         void load(const QUrl &url);
         void image(const QString &outputFileName, int width, int height ,int zoom);
+        inline QWebFrame * frame(){return page_.mainFrame();}
     signals:
         void finished(bool);
 

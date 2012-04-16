@@ -8,7 +8,7 @@
 #include <QUrl>
 #include <webcapture.h>
 #include <QPointer>
-
+#include <QWebFrame>
 
 #include <QDebug>
 
@@ -27,7 +27,8 @@ public:
     void load(const QString &url);
     void load(const QUrl &url);
     void cleanUp();
-
+    QWebFrame * getFrame() ;
+    QString documentTitle();
 signals:
     void loaded(bool);
 
