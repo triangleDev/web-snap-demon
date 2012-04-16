@@ -1,0 +1,3 @@
+run with arguments -h speeddial -p 80 -path /demon
+ -h (host) - required
+ -p  and -path optional arguments

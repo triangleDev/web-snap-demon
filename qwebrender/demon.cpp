@@ -10,9 +10,29 @@ Demon::Demon(QObject *parent) :
     path_tmp = QDir::tempPath() + QDir::toNativeSeparators("/");
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(requestTask()));
-    timer->start(timout);
+
     client = new xmlrpc::Client();
-    client->setHost("speeddial",80,"/demon");
+    QString host;
+    QString path;
+    int port = 80;
+    QStringList _argv = qApp->arguments();
+    qDebug()<<_argv;
+    for(int i = 0; i < _argv.count(); ++i) {
+        if ( _argv[i] == "-h")
+            host = _argv[++i];
+        if ( _argv[i] == "-p")
+            port = QString(_argv[++i]).toInt();
+        if ( _argv[i] == "-path")
+            path = _argv[++i];
+    }
+
+    if (host.isEmpty()){
+        qFatal("host must be not empty");
+        exit(-2);
+    }
+
+    timer->start(timout);
+    client->setHost(host,port,path);
     connect( client, SIGNAL(done( int, QVariant )),
                      this, SLOT(processReturnValue( int, QVariant )) );
     connect( client, SIGNAL(failed( int, int, QString )),
